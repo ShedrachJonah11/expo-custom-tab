@@ -1,5 +1,6 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import React from "react";
+import { AntDesign, Feather } from "@expo/vector-icons";
 
 interface TabBarProps {
   state: any;
@@ -8,8 +9,25 @@ interface TabBarProps {
 }
 
 const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
+  const icons = {
+    index: (props: any) => (
+      <AntDesign name="home" size={24} color={greyColor} {...props} />
+    ),
+    create: (props: any) => (
+      <AntDesign name="pluscircleo" size={24} color={greyColor} {...props} />
+    ),
+    explore: (props: any) => (
+      <Feather name="compass" size={24} color={greyColor} {...props} />
+    ),
+    profile: (props: any) => (
+      <AntDesign name="user" size={24} color={greyColor} {...props} />
+    ),
+  };
+
+  const primaryColor = "#0891b2";
+  const greyColor = "#737373";
   return (
-    <View style={{ flexDirection: "row" }}>
+    <View style={styles.tabbar}>
       {state.routes.map(
         (
           route: { key: string | number; name: string; params: any },
@@ -23,6 +41,7 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
               ? options.title
               : route.name;
 
+          if (["_sitemap", "+not-found"].includes(route.name)) return null;
           const isFocused = state.index === index;
 
           const onPress = () => {
@@ -53,9 +72,17 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
               testID={options.tabBarTestID}
               onPress={onPress}
               onLongPress={onLongPress}
-              style={{ flex: 1 }}
+              style={styles.tabbarItem}
             >
-              <Text style={{ color: isFocused ? "#673ab7" : "#222" }}>
+              {icons[route.name]({
+                color: isFocused ? primaryColor : greyColor,
+              })}
+              <Text
+                style={{
+                  color: isFocused ? primaryColor : greyColor,
+                  fontSize: 11,
+                }}
+              >
                 {label}
               </Text>
             </TouchableOpacity>
@@ -65,5 +92,30 @@ const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  tabbar: {
+    position: "absolute",
+    bottom: 25,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    marginHorizontal: 20,
+    paddingVertical: 15,
+    borderRadius: 25,
+    borderCurve: "continuous",
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 10 },
+    shadowRadius: 10,
+    shadowOpacity: 0.1,
+  },
+  tabbarItem: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 4,
+  },
+});
 
 export default TabBar;
