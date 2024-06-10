@@ -8,24 +8,25 @@ interface TabBarProps {
   navigation: any;
 }
 
-const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
-  const icons = {
-    index: (props: any) => (
-      <AntDesign name="home" size={24} color={greyColor} {...props} />
-    ),
-    create: (props: any) => (
-      <AntDesign name="pluscircleo" size={24} color={greyColor} {...props} />
-    ),
-    explore: (props: any) => (
-      <Feather name="compass" size={24} color={greyColor} {...props} />
-    ),
-    profile: (props: any) => (
-      <AntDesign name="user" size={24} color={greyColor} {...props} />
-    ),
-  };
+const icons: { [key: string]: (props: any) => JSX.Element } = {
+  index: (props: any) => (
+    <AntDesign name="home" size={24} color={greyColor} {...props} />
+  ),
+  create: (props: any) => (
+    <AntDesign name="pluscircleo" size={24} color={greyColor} {...props} />
+  ),
+  explore: (props: any) => (
+    <Feather name="compass" size={24} color={greyColor} {...props} />
+  ),
+  profile: (props: any) => (
+    <AntDesign name="user" size={24} color={greyColor} {...props} />
+  ),
+};
 
-  const primaryColor = "#0891b2";
-  const greyColor = "#737373";
+const primaryColor = "#0891b2";
+const greyColor = "#737373";
+
+const TabBar: React.FC<TabBarProps> = ({ state, descriptors, navigation }) => {
   return (
     <View style={styles.tabbar}>
       {state.routes.map(
